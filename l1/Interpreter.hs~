@@ -1,3 +1,0 @@
-module Interpreter where 
-
-eval :: Exp -> Value

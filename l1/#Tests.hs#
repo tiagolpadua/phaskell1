@@ -1,9 +1,0 @@
-module Tests where 
-
-import Expression
-import Interpreter
-
-expTrue, expFalse :: Exp
-expTrue = BooleanValue True
-expFalse = BooleanValue False
-

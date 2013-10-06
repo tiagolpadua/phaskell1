@@ -14,7 +14,8 @@ exp4 = And (IConst 4) (BConst False)
 test1 = TestCase (assertEqual "And False True" (BooleanValue False) (eval exp1))
 test2 = TestCase (assertEqual "Add (Add 3 4) 3" (IntValue 10) (eval exp2))
 test3 = TestCase (assertEqual "Not False" (BooleanValue True) (eval exp3))
-test4 = TestCase (assertEqual "error expected" (undefined) (eval exp4))
+--test4 = TestCase (assertEqual "error expected" (undefined) (eval exp4))
+test4 = TestCase (assertEqual "error expected" (Undefined) (baseType exp4))
 
 allTests = TestList [TestLabel "test1" test1
                     ,TestLabel "test2" test2
