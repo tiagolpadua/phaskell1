@@ -74,7 +74,8 @@ baseType (App n args) env fds =
 --  [f@(FuncDecl fn fargs exp)] -> let env' = (zip fargs args) ++ env in baseType exp env' fds
   [f@(FuncDecl fn fargs exp)] -> 
     if validaTipoArgs (map snd fargs) args env fds
-    then let env' = (zip (map fst fargs) args) ++ env in baseType exp env' fds
+--    then let env' = (zip (map fst fargs) args) ++ env in baseType exp env' fds
+    then let env' = (zip (map fst fargs) args) in baseType exp env' fds
     else error $ "Arguments with invalid types"
   (f1:f2:fs) -> error $ "Multiple declarations of " ++ n      
 
