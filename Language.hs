@@ -9,7 +9,7 @@ data Value = IntValue Int
 
 type Id = String 
 
-type FormalArgs = [Id]
+type FormalArgs = [(Id,Type)]
 type Args = [Exp]
 type Binding = (Id, Exp)
 
@@ -71,8 +71,12 @@ baseType (RefId i) env fds =
 baseType (App n args) env fds = 
  case findFuncDecls n fds of 
   []  -> error $ "Function " ++ n ++ " not declared"
-  [f@(FuncDecl fn fargs exp)] -> let env' = (zip fargs args) ++ env in baseType exp env' fds
-  (f1:f2:fs) -> error $ "Multiple declarations of " ++ n    
+--  [f@(FuncDecl fn fargs exp)] -> let env' = (zip fargs args) ++ env in baseType exp env' fds
+  [f@(FuncDecl fn fargs exp)] -> 
+    if validaTipoArgs (map snd fargs) args env fds
+    then let env' = (zip (map fst fargs) args) ++ env in baseType exp env' fds
+    else error $ "Arguments with invalid types"
+  (f1:f2:fs) -> error $ "Multiple declarations of " ++ n      
 
 -- o tipo base de uma expressao let verifica 
 -- inicialmente se o tipo base da expressao associada 
@@ -86,6 +90,12 @@ baseType (Let _ exp1 exp2) env fds =
  case baseType exp1 env fds of 
   Undefined -> Undefined
   otherwise -> baseType exp2 env fds
+  
+validaTipoArgs :: [Type] -> Args -> Env -> [FuncDecl] -> Bool
+validaTipoArgs [] _ _ _ = True
+validaTipoArgs (t:ts) (e:es) env fds = if t == (baseType e env fds)
+                                      then validaTipoArgs ts es env fds
+                                      else error $ "Arguments type error"
 
 -- Uma funcao auxiliar usada para checar se 
 -- dois operandos de uma expressao possuem o 
