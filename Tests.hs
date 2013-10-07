@@ -5,9 +5,9 @@ import Test.HUnit
 import Language
 import Interpreter
 
-inc = FuncDecl "inc" ["x"] (Add (RefId "x") (IConst 1))
-soma = FuncDecl "soma" ["x", "y"] (Add (RefId "x") (RefId "y"))
-foo = FuncDecl "foo" ["p"] (RefId "n")
+inc = FuncDecl "inc" [("x", IntType)] (Add (RefId "x") (IConst 1))
+soma = FuncDecl "soma" [("x", IntType), ("y", IntType)] (Add (RefId "x") (RefId "y"))
+foo = FuncDecl "foo" [("p", IntType)] (RefId "n")
 
 
 test1 = TestCase (assertEqual "inc 5" (IntValue 6) (eval (App "inc" [(IConst 5)]) [] [inc]))

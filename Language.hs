@@ -90,7 +90,9 @@ baseType (Let _ exp1 exp2) env fds =
  case baseType exp1 env fds of 
   Undefined -> Undefined
   otherwise -> baseType exp2 env fds
-  
+
+-- Valida os tipos dos argumentos até que não hajam mais argumentos
+-- a serem validados, retornando então True, caso contrário gera um erro
 validaTipoArgs :: [Type] -> Args -> Env -> [FuncDecl] -> Bool
 validaTipoArgs [] _ _ _ = True
 validaTipoArgs (t:ts) (e:es) env fds = if t == (baseType e env fds)

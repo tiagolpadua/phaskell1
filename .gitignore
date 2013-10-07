@@ -1,3 +1,5 @@
+phaskell1.sublime-project
+phaskell1.sublime-workspace
 dist
 cabal-dev
 *.o
@@ -5,3 +7,4 @@ cabal-dev
 *.chi
 *.chs.h
 .virthualenv
+*~
