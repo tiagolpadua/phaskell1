@@ -35,6 +35,15 @@ eval (App n args) env fds =
     in eval exp env' fds
   (f1:f2:fs) -> error $ "Multiple declarations of " ++ n    
 
+-- avalia a expressão IfThenElse
+eval e@(IfThenElse expTeste expThen expElse) env fds =
+  case (baseType e env fds) of
+  (BooleanType) ->  case (eval expTeste env fds) of
+                    (BooleanValue True) -> eval expThen env fds
+                    otherwise -> eval expElse env fds
+  otherwise -> error $ "Wrong datatypes in " ++ (show e) 
+
+
 
 -- a avaliacao de expressoes booleanas / aritmeticas 
 -- envolve a checagem de tipos. Mas isso foi delegado 

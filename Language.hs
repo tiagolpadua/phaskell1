@@ -19,16 +19,17 @@ data FuncDecl = FuncDecl Id FormalArgs Exp
 
 data Exp = IConst Int
          | BConst Bool
-	 | And Exp Exp
-	 | Or Exp Exp
-	 | Not Exp
-	 | Add Exp Exp
-	 | Sub Exp Exp
+	       | And Exp Exp
+	       | Or Exp Exp
+	       | Not Exp
+	       | Add Exp Exp
+	       | Sub Exp Exp
          | Mult Exp Exp  
          | Div Exp Exp
          | Let Id Exp Exp 
          | RefId Id
          | App Id Args 
+         | IfThenElse Exp Exp Exp
  deriving(Show)
 
 
@@ -88,9 +89,16 @@ baseType (App n args) env fds =
 -- da expressao let eh o tipo base da expressao que corresponde 
 -- ao corpo da expressao let.
 baseType (Let _ exp1 exp2) env fds = 
- case baseType exp1 env fds of 
-  Undefined -> Undefined
-  otherwise -> baseType exp2 env fds
+  case baseType exp1 env fds of 
+    Undefined -> Undefined
+    otherwise -> baseType exp2 env fds
+
+-- primeiro verificamos se os tipos das expressões para o Then e o Else são os mesmos,
+-- se forem, então testamos se a expressão teste é BooleanType
+baseType (IfThenElse expTeste expThen expElse) env fds =
+  case (baseType expThen env fds) == (baseType expElse env fds) of
+    True -> sameType expTeste BooleanType env fds
+    otherwise -> Undefined
 
 -- Valida os tipos dos argumentos até que não hajam mais argumentos
 -- a serem validados, retornando então True, caso contrário gera um erro
