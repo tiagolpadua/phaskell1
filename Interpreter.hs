@@ -4,6 +4,7 @@ import Language
 
 -- Nosso interpretador recebe uma expressao
 -- e retorna um valor. 
+--teste
 eval :: Exp -> Env -> [FuncDecl] -> Value   
 eval (IConst x) _ _ = IntValue x
 eval (BConst x) _ _ = BooleanValue x
