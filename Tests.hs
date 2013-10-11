@@ -9,6 +9,7 @@ inc        = FuncDecl "inc" [("x", IntType)] (Add (RefId "x") (IConst 1))
 soma       = FuncDecl "soma" [("x", IntType), ("y", IntType)] (Add (RefId "x") (RefId "y"))
 foo        = FuncDecl "foo" [("p", IntType)] (RefId "n")
 ifthenelse = (IfThenElse (BConst True) (IConst 1) (IConst 2))
+fat        = FuncDecl "fat" [("n", IntType)] (IfThenElse ((RefId "n") /= (IConst 1)) (Mult (RefId "n") (Sub (RefId "n") (IConst 1))) (RefId "n"))
 
 
 test1 = TestCase (assertEqual "inc 5" (IntValue 6) (eval (App "inc" [(IConst 5)]) [] [inc]))
