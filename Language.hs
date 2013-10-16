@@ -26,6 +26,7 @@ data Exp = IConst Int
 	       | Sub Exp Exp
          | Mult Exp Exp  
          | Div Exp Exp
+         | Eq Exp Exp
          | Let Id Exp Exp 
          | RefId Id
          | App Id Args 
@@ -49,6 +50,7 @@ baseType (Sub lhs rhs) env fds = sameTypes (lhs, rhs) IntType env fds
 baseType (Mult lhs rhs) env fds = sameTypes (lhs, rhs) IntType env fds
 baseType (Div lhs rhs) env fds = sameTypes (lhs, rhs) IntType env fds
 baseType (Not e) env fds = sameType e BooleanType env fds
+--baseType (Eq lhs rhs) env fds = sameTypes (lhs, rhs)  env fds
 
 -- o tipo base de uma referencia a um 
 -- id corresponde ao tipo base da expressao 
@@ -92,6 +94,12 @@ baseType (Let _ exp1 exp2) env fds =
   case baseType exp1 env fds of 
     Undefined -> Undefined
     otherwise -> baseType exp2 env fds
+
+-- O tipo base de Eq verifica se os tipos das duas expressões comparadas 
+-- são iguais
+baseType (Eq lhs rhs) env fds  =
+  case (baseType lhs env fds) == (baseType rhs env fds) of
+    True -> BooleanType
 
 -- primeiro verificamos se os tipos das expressões para o Then e o Else são os mesmos,
 -- se forem, então testamos se a expressão teste é BooleanType

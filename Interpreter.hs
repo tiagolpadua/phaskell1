@@ -45,6 +45,14 @@ eval e@(IfThenElse expTeste expThen expElse) env fds =
   otherwise -> error $ "Wrong datatypes in " ++ (show e) 
 
 
+-- avalia a expressão Eq
+eval e@(Eq lhs rhs) env fds =
+  case (baseType e env fds) of
+  (BooleanType) ->  case (eval lhs env fds) == (eval rhs env fds) of
+                    True -> (BooleanValue True)
+                    False -> (BooleanValue False)
+  otherwise -> error $ "Wrong datatypes in " ++ (show e) 
+
 
 -- a avaliacao de expressoes booleanas / aritmeticas 
 -- envolve a checagem de tipos. Mas isso foi delegado 
