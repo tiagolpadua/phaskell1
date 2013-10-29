@@ -5,6 +5,7 @@ data Type = IntType | BooleanType | Undefined
 
 data Value = IntValue Int
            | BooleanValue Bool
+           | AppValue
    deriving(Show, Eq)
 
 type Id = String 
@@ -103,10 +104,16 @@ baseType (Eq lhs rhs) env fds  =
 
 -- primeiro verificamos se os tipos das expressões para o Then e o Else são os mesmos,
 -- se forem, então testamos se a expressão teste é BooleanType
-baseType (IfThenElse expTeste expThen expElse) env fds =
-  case (baseType expThen env fds) == (baseType expElse env fds) of
-    True -> sameType expTeste BooleanType env fds
-    otherwise -> Undefined
+baseType (IfThenElse expTeste expThen expElse) env fds = 
+   let 
+     tTeste = baseType expTeste env fds 
+     tThen  = baseType expThen env fds 
+     tElse  = baseType expElse env fds 
+   in 
+     case tThen == tElse &&  tTeste == BooleanType of
+       True -> tThen
+       otherwise -> Undefined
+
 
 -- Valida os tipos dos argumentos até que não hajam mais argumentos
 -- a serem validados, retornando então True, caso contrário gera um erro

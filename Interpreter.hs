@@ -38,12 +38,13 @@ eval (App n args) env fds =
 
 -- avalia a expressão IfThenElse
 eval e@(IfThenElse expTeste expThen expElse) env fds =
-  case (baseType e env fds) of
-  (BooleanType) ->  case (eval expTeste env fds) of
-                    (BooleanValue True) -> eval expThen env fds
-                    otherwise -> eval expElse env fds
-  otherwise -> error $ "Wrong datatypes in " ++ (show e) 
-
+  let btIfThenElse = (baseType e env fds) in
+     if btIfThenElse == BooleanType || btIfThenElse == IntType 
+     then
+       case (eval expTeste env fds) of
+         (BooleanValue True) -> eval expThen env fds
+         otherwise -> eval expElse env fds
+     else error $ "Wrong datatypes in " ++ (show e) 
 
 -- avalia a expressão Eq
 eval e@(Eq lhs rhs) env fds =
