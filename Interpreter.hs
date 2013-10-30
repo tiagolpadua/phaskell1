@@ -26,15 +26,28 @@ eval (RefId ref) env fds =
      []  -> error $ " not in scope " ++ ref 
      (x:xs) -> eval x env fds
 
+-- avalia a expressão App
 eval (App n args) env fds = 
  case findFuncDecls n fds of 
   []  -> error $ "Function " ++ n ++ " not declared"
   [(FuncDecl fn fargs exp)] -> 
 --    let env' = (zip (map fst fargs) args) ++ env 
 --    in eval exp env' fds
-    let env' = zip (map fst fargs) args
-    in eval exp env' fds
+    if (validaTipoArgs (map snd fargs) args env fds)
+    then
+      let env' = zip (map fst fargs) args
+      in eval exp env' fds
+    else
+      error $ "Invalid parameters: " ++ n    
   (f1:f2:fs) -> error $ "Multiple declarations of " ++ n    
+
+-- avalia a expressão Lambda
+eval e@(Lambda exp) env fds = 
+  let btLambda = (baseType e env fds) in
+    if btLambda == BooleanType || btLambda == IntType 
+    then
+      eval exp env fds
+    else error $ "Wrong datatypes in " ++ (show e) 
 
 -- avalia a expressão IfThenElse
 eval e@(IfThenElse expTeste expThen expElse) env fds =
@@ -81,7 +94,7 @@ evalBinBooleanExp e (lhs, rhs) op env fds =
                     (BooleanValue l) = eval lhs env fds 
                     (BooleanValue r) = eval rhs env fds 
                    in BooleanValue (l `op` r)
-  otherwise -> error $ "Wrong datatypes in " ++ (show e) 
+  otherwise -> error $ "evalBinBooleanExp: Wrong datatypes in " ++ (show e) 
 
 
 evalBinIntExp :: Exp -> (Exp, Exp) -> (Int -> Int -> Int) -> Env -> [FuncDecl] -> Value
@@ -91,5 +104,5 @@ evalBinIntExp e (lhs, rhs) op env fds =
                     (IntValue l) = eval lhs env fds 
                     (IntValue r) = eval rhs env fds
                    in IntValue (l `op` r)
-  otherwise -> error $ "Wrong datatypes in " ++ (show e) 
+  otherwise -> error $ "evalBinIntExp: Wrong datatypes in " ++ (show e) ++ " - " ++ (show (baseType e env fds)) 
                      

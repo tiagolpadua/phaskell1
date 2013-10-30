@@ -5,7 +5,6 @@ data Type = IntType | BooleanType | Undefined
 
 data Value = IntValue Int
            | BooleanValue Bool
-           | AppValue
    deriving(Show, Eq)
 
 type Id = String 
@@ -30,7 +29,8 @@ data Exp = IConst Int
          | Eq Exp Exp
          | Let Id Exp Exp 
          | RefId Id
-         | App Id Args 
+         | App Id Args
+         | Lambda Exp
          | IfThenElse Exp Exp Exp
  deriving(Show)
 
@@ -44,6 +44,7 @@ findFuncDecls n fds = [f | f@(FuncDecl fn fargs exp) <- fds, n == fn]
 baseType :: Exp -> Env -> [FuncDecl] -> Type
 baseType (IConst v) _ _ = IntType
 baseType (BConst v) _ _ = BooleanType
+baseType (Lambda e) env fds = baseType e env fds 
 baseType (And lhs rhs) env fds = sameTypes (lhs, rhs) BooleanType env fds
 baseType (Or lhs rhs) env fds = sameTypes (lhs, rhs) BooleanType env fds
 baseType (Add lhs rhs) env fds = sameTypes (lhs, rhs) IntType env fds
@@ -61,7 +62,7 @@ baseType (Not e) env fds = sameType e BooleanType env fds
 baseType (RefId i) env fds = 
  let exps = findBoundExp i env 
  in case exps of 
-     [] -> Undefined
+     [] -> error $ "Undefined: " ++ (show i) ++ " in " ++ (show env)
      (x:xs) -> baseType x env fds
 
 -- na nossa implementacao, o tipo base de uma aplicacao de funcao
@@ -81,7 +82,7 @@ baseType (App n args) env fds =
 --    then let env' = (zip (map fst fargs) args) ++ env in baseType exp env' fds
     then let env' = (zip (map fst fargs) args) in baseType exp env' fds
     else error $ "Arguments with invalid types"
-  (f1:f2:fs) -> error $ "Multiple declarations of " ++ n      
+  (f1:f2:fs) -> error $ "Multiple declarations of " ++ n          
 
 -- o tipo base de uma expressao let verifica 
 -- inicialmente se o tipo base da expressao associada 
