@@ -52,7 +52,6 @@ baseType (Sub lhs rhs) env fds = sameTypes (lhs, rhs) IntType env fds
 baseType (Mult lhs rhs) env fds = sameTypes (lhs, rhs) IntType env fds
 baseType (Div lhs rhs) env fds = sameTypes (lhs, rhs) IntType env fds
 baseType (Not e) env fds = sameType e BooleanType env fds
---baseType (Eq lhs rhs) env fds = sameTypes (lhs, rhs)  env fds
 
 -- o tipo base de uma referencia a um 
 -- id corresponde ao tipo base da expressao 
@@ -76,10 +75,8 @@ baseType (RefId i) env fds =
 baseType (App n args) env fds = 
  case findFuncDecls n fds of 
   []  -> error $ "Function " ++ n ++ " not declared"
---  [f@(FuncDecl fn fargs exp)] -> let env' = (zip fargs args) ++ env in baseType exp env' fds
   [f@(FuncDecl fn fargs exp)] -> 
     if validaTipoArgs (map snd fargs) args env fds
---    then let env' = (zip (map fst fargs) args) ++ env in baseType exp env' fds
     then let env' = (zip (map fst fargs) args) in baseType exp env' fds
     else error $ "Arguments with invalid types"
   (f1:f2:fs) -> error $ "Multiple declarations of " ++ n          

@@ -30,8 +30,6 @@ eval (App n args) env fds =
  case findFuncDecls n fds of 
   []  -> error $ "Function " ++ n ++ " not declared"
   [(FuncDecl fn fargs exp)] -> 
---    let env' = (zip (map fst fargs) args) ++ env 
---    in eval exp env' fds
     if (validaTipoArgs (map snd fargs) args env fds)
     then
       let env' = zip (map fst fargs) args
