@@ -15,7 +15,7 @@ foo        = FuncDecl "foo" [("p", IntType)] (RefId "n")
 ifthenelse = IfThenElse (BConst True) (IConst 1) (IConst 2)
 
 -- Parte 4 do projeto: IfThenElse retorna uma função Lambda anônima, dependendo do valor da expressão
--- teste, IfThenElse retorna a funcao "x+1" ou a função "x+2"
+-- teste, IfThenElse ao invés de retornar um valor, retorna a funcao "x+1" ou a função "x+2"
 lambda     = IfThenElse (BConst True) (Lambda (Add (RefId "x") (IConst 1))) (Lambda (Add (RefId "x") (IConst 2)))
 
 -- Outros testes:
@@ -41,8 +41,3 @@ test8 = TestCase (assertEqual "Lambda" (IntValue 2) (eval lambda [("x", IConst 1
 
 allTests = 	TestList [TestLabel "test1" test1, TestLabel "test2" test2, TestLabel "test3" test3, TestLabel "test4" test4, TestLabel "test5" test5, 
 			TestLabel "test6" test6, TestLabel "test8" test8]
-
-
---			TestLabel "test6" test6, TestLabel "test7" test7]
-
--- allTests = 	TestList [TestLabel "test8" test8]

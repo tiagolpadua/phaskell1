@@ -12,11 +12,19 @@ PROFESSOR:
 Dr. Rodrigo Bonifácio
 
 ALUNOS:
-Tiago Lage Payne de Pádua
-Eduardo Alves
+Tiago Lage Payne de Pádua - 12/1042457
+Eduardo Alves - 09/0042760
 Vinicius Emiliano dos Santos
 
+
+Os quatro problemas formam implementados porém não foi possível comprovar o funcionamento
+de funções recursivas utilizando a expressão IfThenElse
+
 As atividades implementadas estão descritas no arquivo Tests.hs
+
+
+
+======================================================================================================================================================
 
 
 Proposta:
