@@ -1,6 +1,26 @@
 Projeto Haskell: Primeira Parte
 ======================
 
+UnB - 2o. Semestre de 2013
+
+Departamento de Ciência da Computação - CIC
+
+DISCIPLINA:
+Linguagens de Programação
+
+PROFESSOR:
+Dr. Rodrigo Bonifácio
+
+ALUNOS:
+Tiago Lage Payne de Pádua
+Eduardo Alves
+Vinicius Emiliano dos Santos
+
+As atividades implementadas estão descritas no arquivo Tests.hs
+
+
+Proposta:
+
 Evolução do Interpretador
 -------------------------
 
